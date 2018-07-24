@@ -1,0 +1,90 @@
+﻿<script type="text/JavaScript" src="Int64.js"></script>
+<script type="text/javascript" src="3exSDK.js"></script>
+<script type="text/javascript">
+    sdk = new threeExSDK({ 
+     host : "wss://marketinfo.3ex.com/", 
+    });  
+    sdk.connect();  
+
+    sdk.subInfo('USDT', 'BTC'); 				//订阅特定币种信息
+												//参数
+												//market: 市场名称
+												//coin:	币种名称
+												//
+												//订阅成功后,下发该币种的挂单数据,成交数据,当前币种24小时市场统计数据,当前币种法币价值
+	
+	sdk.subMarketInfo('USDT');					//订阅特定市场的所有币种24小时统计信息
+												//参数
+												//market: 市场名称
+												//
+												//订阅成功后,下发特定市场中所有币种的24小时市场统计数据
+	
+	sdk.klineInfo('USDT', 'BTC', 2, 1, 0); 		//获取k线信息
+												//参数
+												//market: 市场名称
+												//market: 市场名称
+												//coin:	币种名称
+												//type: k线类型 1:分时图, 2:分钟线, 3:小时线, 4:日线 , 5:周线
+												//offset: k线跨度 分钟线(1,5,15,30), 小时线(1,2,4,6,12), 日线和周线(1)
+												//time: k线结束时间戳 0:当前时间
+												//
+												//返回k线信息
+	
+	var fn=window.fn={};
+	fn.MarketOrder=function(res){
+		console.info("挂单数据:",res);
+		/*{
+			"n":"市场名:币种名",
+			"b":[[价格,数量]],		//买单数组
+			"s":[[价格,数量]		//卖单数组
+			]
+			}*/
+	};
+	
+	fn.MatchSuccessInfo=function(res){
+		console.info("成交数据:",res);
+		/*
+		[
+			[
+				价格,
+				数量,
+				时间戳,
+				买卖类型(1买2卖)
+			]
+		]
+		*/
+	};
+	
+	fn.MarketKLineCurrent=function(res){
+		console.log("当前分钟k线:",res);
+		/*
+		["U市场名:币种名","[[时间戳,开始价格,最后价格,最低价格,最高价格,总额]]"]
+		*/
+		
+	};
+	
+	fn.MarketWatch24HoursData=function(res){
+		console.log("当前币种24小时市场统计:",res);
+		/*
+		[最高价,最低价,成交量,涨跌百分比,显示名称,最新价, 人民币价值,美金价格,比特币价值]
+		*/ 
+	};
+	
+	fn.MarketKLine=function(res){
+		console.log("k线:",res);
+		/*
+		[
+			{"market":"市场名","coin":"币种名","type":k线类型,"offset_k":k线跨度,"time":k线结束时间戳},
+			"[[时间戳,开始价格,最后价格,最低价格,最高价格,总额]]"]
+		*/
+	};
+
+	
+	fn.Market24HoursData=function(res){
+		console.log("24小时市场各币种统计:",res);
+		/*
+		{"市场名:币种名":[最高价,最低价,成交量,涨跌百分比,显示名称,最新价, 人民币价值,美金价格,比特币价值]}
+		*/
+	};
+	
+	</script>
